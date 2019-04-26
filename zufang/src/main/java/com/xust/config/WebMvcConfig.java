@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
@@ -64,27 +65,40 @@ public class WebMvcConfig  extends WebMvcConfigurerAdapter implements Applicatio
     }
 
 
-
+    /**
+     *  
+     *  thymeleaf 标准方言解释器
+     * @author Luo Daiyang
+     * @date 2019/4/24 15:07
+     * @param []
+     * @return org.thymeleaf.spring4.SpringTemplateEngine
+     */
     public SpringTemplateEngine templateEngine(){
         SpringTemplateEngine templateEngine=new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
         //支持Sring EL表达式
         templateEngine.setEnableSpringELCompiler(true);
-
+        // 支持SpringSecurity方言
+        SpringSecurityDialect securityDialect = new SpringSecurityDialect();
+        templateEngine.addDialect(securityDialect);
 
         return  templateEngine;
 
     }
-
+/**
+ *  
+ * 视图解析器
+ * @author Luo Daiyang
+ * @date 2019/4/24 15:08
+ * @param []
+ * @return org.thymeleaf.spring4.view.ThymeleafViewResolver
+ */
     public ThymeleafViewResolver viewResolver(){
 
         ThymeleafViewResolver viewResolver=new ThymeleafViewResolver();
          viewResolver.setTemplateEngine(templateEngine());
          return  viewResolver;
     }
-
-
-
 
 
 }

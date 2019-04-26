@@ -23,6 +23,9 @@ public class UserRepositoryTest extends zufangApplicationTests {
     @Test
     public  void testFindOne(){
         User user=userRepository.findOne(2L);
+
         Assert.assertEquals("admin",user.getName());
+        System.out.println("mysqltest");
+        System.out.println(user);
     }
 }

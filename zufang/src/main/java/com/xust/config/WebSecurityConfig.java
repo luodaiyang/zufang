@@ -1,6 +1,8 @@
 package com.xust.config;
 
 import com.xust.security.AuthProvider;
+import com.xust.security.LoginAuthFailHandler;
+import com.xust.security.LoginUrlEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -43,7 +45,18 @@ public class WebSecurityConfig  extends
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/login") // 配置角色登录处理入口
-                .and();
+                .failureHandler(authFailHandler())
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/logout/page")
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(urlEntryPoint())
+                .accessDeniedPage("/403");
+
 
 
         http.csrf().disable();
@@ -69,6 +82,17 @@ public class WebSecurityConfig  extends
     @Bean
     public AuthProvider authProvider() {
         return new AuthProvider();
+    }
+
+    @Bean
+    public LoginUrlEntryPoint urlEntryPoint() {
+        return new LoginUrlEntryPoint("/user/login");
+    }
+
+
+    @Bean
+    public LoginAuthFailHandler authFailHandler() {
+        return new LoginAuthFailHandler(urlEntryPoint());
     }
 
 }
