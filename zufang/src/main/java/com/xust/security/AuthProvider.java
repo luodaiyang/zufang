@@ -1,7 +1,7 @@
 package com.xust.security;
 
 import com.xust.entity.User;
-import com.xust.service.IUserService;
+import com.xust.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;

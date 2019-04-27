@@ -1,4 +1,4 @@
-package com.xust.service;
+package com.xust.service.user;
 
 import com.xust.entity.User;
 

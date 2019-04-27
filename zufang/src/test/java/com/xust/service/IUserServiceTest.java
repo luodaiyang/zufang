@@ -1,11 +1,10 @@
 package com.xust.service;
 
 import com.xust.entity.User;
+import com.xust.service.user.IUserService;
 import com.xust.zufangApplicationTests;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.junit.Assert.*;
 
 /**
  * @author: Luo Daiyang

@@ -5,7 +5,6 @@ import com.xust.entity.Role;
 import com.xust.entity.User;
 import com.xust.repository.RoleRepository;
 import com.xust.repository.UserRepository;
-import com.xust.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
