@@ -49,4 +49,18 @@ public class AdminController {
         return "admin/login";
     }
 
+    /**
+     *  
+     * 新增房源功能页
+     * @author Luo Daiyang
+     * @date 2019/4/27 9:15
+     * @param []
+     * @return java.lang.String
+     */
+    @GetMapping("/admin/add/house")
+    public String addHousePage(){
+        return  "admin/house-add";
+    }
+
+
 }
