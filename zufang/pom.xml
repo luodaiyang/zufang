@@ -123,6 +123,20 @@
 			<scope>compile</scope>
 		</dependency>
 
+
+		<!-- ModelMapper Simple, Intelligent, Object Mapping. -->
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>18.0</version>
+		</dependency>
+
 		<!--测试核心依赖包-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -1,5 +1,6 @@
 package com.xust.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -100,5 +101,16 @@ public class WebMvcConfig  extends WebMvcConfigurerAdapter implements Applicatio
          return  viewResolver;
     }
 
-
+    /**
+     *  
+     *  Bean Util
+     * @author Luo Daiyang
+     * @date 2019/4/28 20:27
+     * @param []
+     * @return org.modelmapper.ModelMapper
+     */
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
 }
