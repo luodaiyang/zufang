@@ -1,6 +1,4 @@
-/**
- * Created by 瓦力.
- */
+
 $(function () {
     var $city = $("#city"),
         $region = $("#region"),

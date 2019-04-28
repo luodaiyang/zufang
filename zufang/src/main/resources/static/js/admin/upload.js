@@ -1,4 +1,4 @@
-(function ($) {
+ (function ($) {
     // 当domReady的时候开始初始化
     $(function () {
         var $wrap = $('.uploader-list-container'),
