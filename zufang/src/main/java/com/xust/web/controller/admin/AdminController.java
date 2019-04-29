@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.xust.base.ApiResponse;
+import com.xust.service.house.IAddressService;
 import com.xust.service.house.IQiNiuService;
 import com.xust.web.dto.QiNiuPutRet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ import java.io.InputStream;
  */
 @Controller
 public class AdminController {
+
+    @Autowired
+    private IAddressService addressService;
 
     @Autowired
     private IQiNiuService qiNiuService;
@@ -71,6 +75,18 @@ public class AdminController {
     @GetMapping("/admin/login")
     public String adminLoginPage(){
         return "admin/login";
+    }
+    /**
+     *  
+     * 房源列表页
+     * @author Luo Daiyang
+     * @date 2019/4/29 11:15
+     * @param []
+     * @return java.lang.String
+     */
+    @GetMapping("admin/house/list")
+    public String houseListPage() {
+        return "admin/house-list";
     }
 
     /**

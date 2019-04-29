@@ -2,8 +2,12 @@ package com.xust.service.house;
 
 import com.xust.entity.SupportAddress;
 import com.xust.service.ServiceMultiResult;
+import com.xust.service.ServiceResult;
+import com.xust.web.dto.SubwayDTO;
+import com.xust.web.dto.SubwayStationDTO;
 import com.xust.web.dto.SupportAddressDTO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,5 +49,54 @@ public interface IAddressService {
      * @return com.xust.service.ServiceMultiResult
      */
     ServiceMultiResult findAllRegionsByCityName(String cityName);
+
+    /**
+     *  
+     * 获取该城市所有的地铁线路
+     * @author Luo Daiyang
+     * @date 2019/4/29 10:45
+     * @param [cityEnName]
+     * @return java.util.List<com.xust.web.dto.SubwayDTO>
+     */
+    List<SubwayDTO> findAllSubwayByCity(String cityEnName);
+    /**
+     *  
+     * 获取地铁线路所有的站点
+     * @author Luo Daiyang
+     * @date 2019/4/29 10:46
+     * @param [subwayId]
+     * @return java.util.List<com.xust.web.dto.SubwayStationDTO>
+     */
+    List<SubwayStationDTO> findAllStationBySubway(Long subwayId);
+    /**
+     *  
+     * 获取地铁线信息
+     * @author Luo Daiyang
+     * @date 2019/4/29 10:47
+     * @param [subwayId]
+     * @return ServiceResult<SubwayDTO>
+     */
+    ServiceResult<SubwayDTO> findSubway(Long subwayId);
+    
+    /**
+     *  
+     * 获取地铁站点信息
+     * @author Luo Daiyang
+     * @date 2019/4/29 10:48
+     * @param [stationId]
+     * @return com.xust.service.ServiceResult<com.xust.web.dto.SubwayStationDTO>
+     */
+
+    ServiceResult<SubwayStationDTO> findSubwayStation(Long stationId);
+    /**
+     *  
+     * 根据城市英文简写获取城市详细信息
+     * @author Luo Daiyang
+     * @date 2019/4/29 10:50
+     * @param [cityEnName]
+     * @return com.xust.service.ServiceResult<com.xust.web.dto.SupportAddressDTO>
+     */
+    ServiceResult<SupportAddressDTO> findCity(String cityEnName);
+
 }
 
