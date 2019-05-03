@@ -8,32 +8,32 @@ package com.xust.service;
  * @modified By:
  */
 public class ServiceResult<T> {
-    private  boolean successs;
+    private  boolean success;
     private  String message;
     private  T result;
 
-    public ServiceResult(boolean successs) {
-        this.successs = successs;
+    public ServiceResult(boolean success) {
+        this.success = success;
     }
 
     public  ServiceResult(Boolean successs ,String message){
-        this.successs=successs;
+        this.success=successs;
         this.message=message;
 
     }
 
     public ServiceResult(boolean successs, String message, T result) {
-        this.successs = successs;
+        this.success = success;
         this.message = message;
         this.result = result;
     }
 
-    public boolean isSuccesss() {
-        return successs;
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setSuccesss(boolean successs) {
-        this.successs = successs;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     public String getMessage() {

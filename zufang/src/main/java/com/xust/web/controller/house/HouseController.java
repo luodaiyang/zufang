@@ -5,6 +5,8 @@ import com.xust.service.ServiceMultiResult;
 import com.xust.service.ServiceResult;
 import com.xust.service.house.IAddressService;
 import com.xust.service.user.IUserService;
+import com.xust.web.dto.SubwayDTO;
+import com.xust.web.dto.SubwayStationDTO;
 import com.xust.web.dto.SupportAddressDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,7 +31,9 @@ public class HouseController {
 
     @Autowired
     private IUserService userService;
-    
+
+
+
     /**
      *  
      * 获取支持城市列表
@@ -68,5 +72,42 @@ public class HouseController {
         return ApiResponse.ofSuccess(addressResult.getResult());
     }
 
+    /**
+     *  
+     * 获取具体城市所支持的地铁线路
+     * @author Luo Daiyang
+     * @date 2019/4/29 15:57
+     * @param [cityEnName]
+     * @return com.xust.base.ApiResponse
+     */
+    @GetMapping("address/support/subway/line")
+    @ResponseBody
+    public ApiResponse getSupportSubwayLine(@RequestParam(name = "city_name") String cityEnName) {
+        List<SubwayDTO> subways = addressService.findAllSubwayByCity(cityEnName);
+        if (subways.isEmpty()) {
+            return ApiResponse.ofStatus(ApiResponse.Status.NOT_FOUND);
+        }
+
+        return ApiResponse.ofSuccess(subways);
+    }
+
+    /**
+     *  
+     * 获取对应地铁线路所支持的地铁站点
+     * @author Luo Daiyang
+     * @date 2019/4/29 15:58
+     * @param [subwayId]
+     * @return com.xust.base.ApiResponse
+     */
+    @GetMapping("address/support/subway/station")
+    @ResponseBody
+    public ApiResponse getSupportSubwayStation(@RequestParam(name = "subway_id") Long subwayId) {
+        List<SubwayStationDTO> stationDTOS = addressService.findAllStationBySubway(subwayId);
+        if (stationDTOS.isEmpty()) {
+            return ApiResponse.ofStatus(ApiResponse.Status.NOT_FOUND);
+        }
+
+        return ApiResponse.ofSuccess(stationDTOS);
+    }
 
 }

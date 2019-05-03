@@ -4,21 +4,28 @@ import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.xust.base.ApiResponse;
+import com.xust.entity.SupportAddress;
+import com.xust.service.ServiceResult;
 import com.xust.service.house.IAddressService;
+import com.xust.service.house.IHouseService;
 import com.xust.service.house.IQiNiuService;
+import com.xust.web.dto.HouseDTO;
 import com.xust.web.dto.QiNiuPutRet;
+import com.xust.web.dto.SupportAddressDTO;
+import com.xust.web.form.HouseForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * @author: Luo Daiyang
@@ -35,6 +42,8 @@ public class AdminController {
     @Autowired
     private IQiNiuService qiNiuService;
 
+    @Autowired
+    private IHouseService houseService;
 
     @Autowired
     private Gson gson;
@@ -142,6 +151,40 @@ public class AdminController {
             return ApiResponse.ofStatus(ApiResponse.Status.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     *  
+     * 新增房源接口
+     * @author Luo Daiyang
+     * @date 2019/5/3 17:34
+     * @param [houseForm, bindingResult]
+     * @return com.xust.base.ApiResponse
+     */
+
+    @PostMapping("admin/add/house")
+    @ResponseBody
+    public ApiResponse addHouse(@Valid @ModelAttribute("form-house-add") HouseForm houseForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ApiResponse(HttpStatus.BAD_REQUEST.value(), bindingResult.getAllErrors().get(0).getDefaultMessage(), null);
+        }
+
+        if (houseForm.getPhotos() == null || houseForm.getCover() == null) {
+            return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), "必须上传图片");
+        }
+
+        Map<SupportAddress.Level, SupportAddressDTO> addressMap = addressService.findCityAndRegion(houseForm.getCityEnName(), houseForm.getRegionEnName());
+        if (addressMap.keySet().size() != 2) {
+            return ApiResponse.ofStatus(ApiResponse.Status.NOT_VALID_PARAM);
+        }
+
+        ServiceResult<HouseDTO> result = houseService.save(houseForm);
+        if (result.isSuccess()) {
+            return ApiResponse.ofSuccess(result.getResult());
+        }
+
+        return ApiResponse.ofSuccess(ApiResponse.Status.NOT_VALID_PARAM);
+    }
+
 
 
 
