@@ -62,5 +62,8 @@ public interface IHouseService  {
      * 更新房源状态
      */
     ServiceResult updateStatus(Long id, int status);
-
+    /**
+     * 查询房源信息集
+     */
+    ServiceMultiResult<HouseDTO> query(RentSearch rentSearch);
 }

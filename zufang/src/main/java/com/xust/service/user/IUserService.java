@@ -1,6 +1,8 @@
 package com.xust.service.user;
 
 import com.xust.entity.User;
+import com.xust.service.ServiceResult;
+import com.xust.web.dto.UserDTO;
 
 /**
  * @author: Luo Daiyang
@@ -10,4 +12,6 @@ import com.xust.entity.User;
  */
 public interface IUserService {
     User findUserByName(String userName);
+
+    ServiceResult<UserDTO> findById(Long userId);
 }

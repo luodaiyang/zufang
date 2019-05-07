@@ -1,20 +1,24 @@
 package com.xust.web.controller.house;
 
 import com.xust.base.ApiResponse;
+import com.xust.base.RentValueBlock;
+import com.xust.entity.SupportAddress;
 import com.xust.service.ServiceMultiResult;
 import com.xust.service.ServiceResult;
 import com.xust.service.house.IAddressService;
+import com.xust.service.house.IHouseService;
 import com.xust.service.user.IUserService;
-import com.xust.web.dto.SubwayDTO;
-import com.xust.web.dto.SubwayStationDTO;
-import com.xust.web.dto.SupportAddressDTO;
+import com.xust.web.dto.*;
+import com.xust.web.form.RentSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Luo Daiyang
@@ -31,6 +35,9 @@ public class HouseController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private IHouseService houseService;
 
 
 
@@ -108,6 +115,87 @@ public class HouseController {
         }
 
         return ApiResponse.ofSuccess(stationDTOS);
+    }
+
+    @GetMapping("rent/house")
+    public String rentHousePage(@ModelAttribute RentSearch rentSearch,
+                                Model model, HttpSession session,
+                                RedirectAttributes redirectAttributes) {
+        if (rentSearch.getCityEnName() == null) {
+            String cityEnNameInSession = (String) session.getAttribute("cityEnName");
+            if (cityEnNameInSession == null) {
+                redirectAttributes.addAttribute("msg", "must_chose_city");
+                return "redirect:/index";
+            } else {
+                rentSearch.setCityEnName(cityEnNameInSession);
+            }
+        } else {
+            session.setAttribute("cityEnName", rentSearch.getCityEnName());
+        }
+
+        ServiceResult<SupportAddressDTO> city = addressService.findCity(rentSearch.getCityEnName());
+        if (!city.isSuccess()) {
+            redirectAttributes.addAttribute("msg", "must_chose_city");
+            return "redirect:/index";
+        }
+        model.addAttribute("currentCity", city.getResult());
+
+        ServiceMultiResult<SupportAddressDTO> addressResult = addressService.findAllRegionsByCityName(rentSearch.getCityEnName());
+        if (addressResult.getResult() == null || addressResult.getTotal() < 1) {
+            redirectAttributes.addAttribute("msg", "must_chose_city");
+            return "redirect:/index";
+        }
+
+        ServiceMultiResult<HouseDTO> serviceMultiResult = houseService.query(rentSearch);
+
+        model.addAttribute("total", serviceMultiResult.getTotal());
+        model.addAttribute("houses", serviceMultiResult.getResult());
+
+        if (rentSearch.getRegionEnName() == null) {
+            rentSearch.setRegionEnName("*");
+        }
+
+        model.addAttribute("searchBody", rentSearch);
+        model.addAttribute("regions", addressResult.getResult());
+
+        model.addAttribute("priceBlocks", RentValueBlock.PRICE_BLOCK);
+        model.addAttribute("areaBlocks", RentValueBlock.AREA_BLOCK);
+
+        model.addAttribute("currentPriceBlock", RentValueBlock.matchPrice(rentSearch.getPriceBlock()));
+        model.addAttribute("currentAreaBlock", RentValueBlock.matchArea(rentSearch.getAreaBlock()));
+
+        return "rent-list";
+    }
+
+    @GetMapping("rent/house/show/{id}")
+    public String show(@PathVariable(value = "id") Long houseId,
+                       Model model) {
+        if (houseId <= 0) {
+            return "404";
+        }
+
+        ServiceResult<HouseDTO> serviceResult = houseService.findCompleteOne(houseId);
+        if (!serviceResult.isSuccess()) {
+            return "404";
+        }
+
+        HouseDTO houseDTO = serviceResult.getResult();
+        Map<SupportAddress.Level, SupportAddressDTO>
+                addressMap = addressService.findCityAndRegion(houseDTO.getCityEnName(), houseDTO.getRegionEnName());
+
+        SupportAddressDTO city = addressMap.get(SupportAddress.Level.CITY);
+        SupportAddressDTO region = addressMap.get(SupportAddress.Level.REGION);
+
+        model.addAttribute("city", city);
+        model.addAttribute("region", region);
+
+        ServiceResult<UserDTO> userDTOServiceResult = userService.findById(houseDTO.getAdminId());
+        model.addAttribute("agent", userDTOServiceResult.getResult());
+        model.addAttribute("house", houseDTO);
+
+        model.addAttribute("houseCountInDistrict",0);
+
+        return "house-detail";
     }
 
 }
