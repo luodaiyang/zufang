@@ -9,7 +9,6 @@ import com.xust.repository.HouseDetailRepository;
 import com.xust.repository.HouseRepository;
 import com.xust.repository.HouseTagRepository;
 import com.xust.repository.SupportAddressRepository;
-import com.xust.service.ServiceResult;
 import com.xust.service.house.IAddressService;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -122,8 +121,18 @@ public class SearchServiceImpl implements ISearchService {
     }
 
     @Override
-    public void remove(Long houseId) {
+    public boolean remove(Long houseId) {
+        DeleteByQueryRequestBuilder builder = DeleteByQueryAction.INSTANCE
+                .newRequestBuilder(esClient)
+                .filter(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseId))
+                .source(INDEX_NAME);
 
+        logger.debug("Delete by query for house:  "  + builder);
+
+        BulkByScrollResponse response = builder.get();
+        long deleted = response.getDeleted();
+        logger.debug("deleted total"+deleted);
+        return false;
     }
 
 

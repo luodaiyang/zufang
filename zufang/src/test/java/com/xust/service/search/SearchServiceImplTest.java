@@ -22,4 +22,11 @@ public class SearchServiceImplTest  extends zufangApplicationTests {
       boolean susses=  searchService.index(targetHouseId);
         Assert.assertTrue(susses);
     }
+
+    @Test
+    public  void remove(){
+        Long houseId=15L;
+        boolean susses=searchService.remove(houseId);
+
+    }
 }

@@ -10,6 +10,7 @@ import com.xust.entity.*;
 import com.xust.repository.*;
 import com.xust.service.ServiceMultiResult;
 import com.xust.service.ServiceResult;
+import com.xust.service.search.ISearchService;
 import com.xust.web.dto.HouseDTO;
 import com.xust.web.dto.HouseDetailDTO;
 import com.xust.web.dto.HousePictureDTO;
@@ -69,6 +70,8 @@ public class HouseServiceImpl implements IHouseService {
     @Autowired
     private SubwayStationRepository subwayStationRepository;
 
+    @Autowired
+    private ISearchService searchService;
 
     @Value("${qiniu.cdn.prefix}")
     private String cdnPrefix;
@@ -188,7 +191,7 @@ public class HouseServiceImpl implements IHouseService {
     private ServiceResult<HouseDTO> wrapperDetailInfo(HouseDetail houseDetail, HouseForm houseForm) {
         Subway subway = subwayRepository.findOne(houseForm.getSubwayLineId());
         if (subway == null) {
-            return new ServiceResult<>(false, "Not valid subway line!");
+            return new ServiceResult<>(false, " Not  valid subway line!");
         }
 
         SubwayStation subwayStation = subwayStationRepository.findOne(houseForm.getSubwayStationId());
@@ -232,6 +235,7 @@ public class HouseServiceImpl implements IHouseService {
             picture.setPath(photoForm.getPath());
             picture.setWidth(photoForm.getWidth());
             picture.setHeight(photoForm.getHeight());
+
             pictures.add(picture);
         }
         return pictures;
@@ -308,6 +312,10 @@ public class HouseServiceImpl implements IHouseService {
         modelMapper.map(houseForm, house);
         house.setLastUpdateTime(new Date());
         houseRepository.save(house);
+
+        if (house.getStatus() == HouseStatus.PASSES.getValue()) {
+            searchService.index(house.getId());
+        }
 
         return ServiceResult.success();
     }
@@ -411,7 +419,12 @@ public class HouseServiceImpl implements IHouseService {
 
         houseRepository.updateStatus(id, status);
 
-
+        // 上架更新索引 其他情况都要删除索引
+        if (status == HouseStatus.PASSES.getValue()) {
+            searchService.index(id);
+        } else {
+            searchService.remove(id);
+        }
         return ServiceResult.success();
     }
 
