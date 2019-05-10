@@ -1,5 +1,7 @@
 package com.xust.service.search;
 
+import com.xust.service.ServiceMultiResult;
+import com.xust.web.form.RentSearch;
 import com.xust.zufangApplicationTests;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,6 +29,17 @@ public class SearchServiceImplTest  extends zufangApplicationTests {
     public  void remove(){
         Long houseId=15L;
         boolean susses=searchService.remove(houseId);
+
+    }
+    @Test
+    public  void query(){
+        RentSearch rentSearch=new RentSearch();
+        rentSearch.setCityEnName("bj");
+        rentSearch.setStart(0);
+        rentSearch.setSize(8);
+
+        ServiceMultiResult<Long> serviceResult=searchService.query(rentSearch);
+        Assert.assertEquals(4,serviceResult.getTotal());
 
     }
 }

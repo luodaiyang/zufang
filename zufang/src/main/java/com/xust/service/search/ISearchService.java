@@ -1,5 +1,8 @@
 package com.xust.service.search;
 
+import com.xust.service.ServiceMultiResult;
+import com.xust.web.form.RentSearch;
+
 /**
  * 检索接口
  * @author: Luo Daiyang
@@ -27,4 +30,15 @@ public interface ISearchService {
  * @return void
  */
     boolean remove(Long houseId);
+
+
+    /**
+     *  查询房源接口
+     *
+     * @author Luo Daiyang
+     * @date 2019/5/9 16:22
+     * @param [rentSearch]
+     * @return com.xust.service.ServiceMultiResult<java.lang.Long>
+     */
+    ServiceMultiResult<Long> query(RentSearch rentSearch);
 }
