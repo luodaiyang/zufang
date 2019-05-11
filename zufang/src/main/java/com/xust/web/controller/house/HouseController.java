@@ -7,6 +7,7 @@ import com.xust.service.ServiceMultiResult;
 import com.xust.service.ServiceResult;
 import com.xust.service.house.IAddressService;
 import com.xust.service.house.IHouseService;
+import com.xust.service.search.ISearchService;
 import com.xust.service.user.IUserService;
 import com.xust.web.dto.*;
 import com.xust.web.form.RentSearch;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +42,8 @@ public class HouseController {
     private IHouseService houseService;
 
 
+    @Autowired
+    private ISearchService searchService;
 
     /**
      *  
@@ -193,9 +197,33 @@ public class HouseController {
         model.addAttribute("agent", userDTOServiceResult.getResult());
         model.addAttribute("house", houseDTO);
 
-        model.addAttribute("houseCountInDistrict",0);
+        ServiceResult<Long> aggResult = searchService.aggregateDistrictHouse(city.getEnName(), region.getEnName(), houseDTO.getDistrict());
+        model.addAttribute("houseCountInDistrict", aggResult.getResult());
 
         return "house-detail";
+    }
+
+
+    /**
+     *
+     * 自动补全接口
+     * @author Luo Daiyang
+     * @date 2019/5/10 11:30
+     * @param [prefix]
+     * @return com.xust.base.ApiResponse
+     */
+    @GetMapping("rent/house/autocomplete")
+    @ResponseBody
+    public ApiResponse autocomplete(@RequestParam(value = "prefix") String prefix) {
+
+        if (prefix.isEmpty()) {
+            return ApiResponse.ofStatus(ApiResponse.Status.BAD_REQUEST);
+        }
+       ServiceResult<List<String>> result = this.searchService.suggest(prefix);
+
+
+       return ApiResponse.ofSuccess(result.getResult());
+
     }
 
 }

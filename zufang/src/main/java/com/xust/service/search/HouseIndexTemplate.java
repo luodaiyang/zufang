@@ -41,8 +41,16 @@ public class HouseIndexTemplate {
 
     private  int rentWay;
 
-
+    private List<HouseSuggest> suggest;
     private List<String> tags;
+
+    public List<HouseSuggest> getSuggest() {
+        return suggest;
+    }
+
+    public void setSuggest(List<HouseSuggest> suggest) {
+        this.suggest = suggest;
+    }
 
     public Long getHouseId() {
         return houseId;
