@@ -18,12 +18,12 @@ import static org.junit.Assert.*;
 public class SearchServiceImplTest  extends zufangApplicationTests {
     @Autowired
     private  ISearchService searchService;
-    @Test
+/*    @Test
     public void index() {
         Long targetHouseId=15L;
       boolean susses=  searchService.index(targetHouseId);
         Assert.assertTrue(susses);
-    }
+    }*/
 
     @Test
     public  void remove(){

@@ -14,10 +14,7 @@ import com.xust.service.search.ISearchService;
 import com.xust.web.dto.HouseDTO;
 import com.xust.web.dto.HouseDetailDTO;
 import com.xust.web.dto.HousePictureDTO;
-import com.xust.web.form.DatatableSearch;
-import com.xust.web.form.HouseForm;
-import com.xust.web.form.PhotoForm;
-import com.xust.web.form.RentSearch;
+import com.xust.web.form.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -458,6 +455,30 @@ public class HouseServiceImpl implements IHouseService {
         }
 
         return simpleQuery(rentSearch);
+    }
+
+    @Override
+    public ServiceMultiResult<HouseDTO> wholeMapQuery(MapSearch mapSearch) {
+        ServiceMultiResult<Long> serviceResult =
+                searchService.mapQuery(mapSearch.getCityEnName(),
+                mapSearch.getOrderBy(), mapSearch.getOrderDirection(), mapSearch.getStart(), mapSearch.getSize());
+
+        if (serviceResult.getTotal() == 0) {
+            return new ServiceMultiResult<>(0, new ArrayList<>());
+        }
+        List<HouseDTO> houses = wrapperHouseResult(serviceResult.getResult());
+        return new ServiceMultiResult<>(serviceResult.getTotal(), houses);
+    }
+
+    @Override
+    public ServiceMultiResult<HouseDTO> boundMapQuery(MapSearch mapSearch) {
+        ServiceMultiResult<Long> serviceResult = searchService.mapQuery(mapSearch);
+        if (serviceResult.getTotal() == 0) {
+            return new ServiceMultiResult<>(0, new ArrayList<>());
+        }
+
+        List<HouseDTO> houses = wrapperHouseResult(serviceResult.getResult());
+        return new ServiceMultiResult<>(serviceResult.getTotal(), houses);
     }
 
     private ServiceMultiResult<HouseDTO> simpleQuery(RentSearch rentSearch) {

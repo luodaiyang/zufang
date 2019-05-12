@@ -48,6 +48,16 @@ public class HouseIndexTemplate {
         return suggest;
     }
 
+    private BaiduMapLocation location;
+
+    public BaiduMapLocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(BaiduMapLocation location) {
+        this.location = location;
+    }
+
     public void setSuggest(List<HouseSuggest> suggest) {
         this.suggest = suggest;
     }

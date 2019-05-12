@@ -5,6 +5,7 @@ import com.xust.service.ServiceResult;
 import com.xust.web.dto.HouseDTO;
 import com.xust.web.form.DatatableSearch;
 import com.xust.web.form.HouseForm;
+import com.xust.web.form.MapSearch;
 import com.xust.web.form.RentSearch;
 
 /**
@@ -66,4 +67,23 @@ public interface IHouseService  {
      * 查询房源信息集
      */
     ServiceMultiResult<HouseDTO> query(RentSearch rentSearch);
+    /**
+     *
+     * 全地图查询
+     * @author Luo Daiyang
+     * @date 2019/5/11 16:25
+     * @param [mapSearch]
+     * @return com.xust.service.ServiceMultiResult<com.xust.web.dto.HouseDTO>
+     */
+    ServiceMultiResult<HouseDTO> wholeMapQuery(MapSearch mapSearch);
+
+/**
+ *
+ * 精确范围数据查询
+ * @author Luo Daiyang
+ * @date 2019/5/11 18:57
+ * @param [mapSearch]
+ * @return com.xust.service.ServiceMultiResult<com.xust.web.dto.HouseDTO>
+ */
+    ServiceMultiResult<HouseDTO> boundMapQuery(MapSearch mapSearch);
 }

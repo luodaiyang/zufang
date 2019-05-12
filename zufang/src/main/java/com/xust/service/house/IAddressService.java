@@ -3,6 +3,7 @@ package com.xust.service.house;
 import com.xust.entity.SupportAddress;
 import com.xust.service.ServiceMultiResult;
 import com.xust.service.ServiceResult;
+import com.xust.service.search.BaiduMapLocation;
 import com.xust.web.dto.SubwayDTO;
 import com.xust.web.dto.SubwayStationDTO;
 import com.xust.web.dto.SupportAddressDTO;
@@ -98,5 +99,21 @@ public interface IAddressService {
      */
     ServiceResult<SupportAddressDTO> findCity(String cityEnName);
 
+
+    /**
+     * 根据城市以及具体地位获取百度地图的经纬度
+     */
+    ServiceResult<BaiduMapLocation> getBaiduMapLocation(String city, String address);
+
+    /**
+     * 上传百度LBS数据
+     */
+    ServiceResult lbsUpload(BaiduMapLocation location, String title, String address,
+                            long houseId, int price, int area);
+
+    /**
+     * 移除百度LBS数据
+     */
+    ServiceResult removeLbs(Long houseId);
 }
 

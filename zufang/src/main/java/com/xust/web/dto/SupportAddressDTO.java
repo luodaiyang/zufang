@@ -2,6 +2,8 @@ package com.xust.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.Column;
+
 /**
  * @author: Luo Daiyang
  * @description:
@@ -20,6 +22,28 @@ public class SupportAddressDTO {
     private String cnName;
 
     private String level;
+
+
+    private double baiduMapLongitude;
+
+
+    private double baiduMapLatitude;
+
+    public double getBaiduMapLongitude() {
+        return baiduMapLongitude;
+    }
+
+    public void setBaiduMapLongitude(double baiduMapLongitude) {
+        this.baiduMapLongitude = baiduMapLongitude;
+    }
+
+    public double getBaiduMapLatitude() {
+        return baiduMapLatitude;
+    }
+
+    public void setBaiduMapLatitude(double baiduMapLatitude) {
+        this.baiduMapLatitude = baiduMapLatitude;
+    }
 
     public long getId() {
         return id;

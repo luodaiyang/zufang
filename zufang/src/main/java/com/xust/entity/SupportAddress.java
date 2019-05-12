@@ -26,6 +26,28 @@ public class SupportAddress {
 
     private String level;
 
+    @Column(name = "baidu_map_lng")
+    private double baiduMapLongitude;
+
+    public double getBaiduMapLongitude() {
+        return baiduMapLongitude;
+    }
+
+    public void setBaiduMapLongitude(double baiduMapLongitude) {
+        this.baiduMapLongitude = baiduMapLongitude;
+    }
+
+    public double getBaiduMapLatitude() {
+        return baiduMapLatitude;
+    }
+
+    public void setBaiduMapLatitude(double baiduMapLatitude) {
+        this.baiduMapLatitude = baiduMapLatitude;
+    }
+
+    @Column(name = "baidu_map_lat")
+    private double baiduMapLatitude;
+
     public Long getId() {
         return id;
     }

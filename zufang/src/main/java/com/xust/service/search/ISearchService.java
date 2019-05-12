@@ -2,6 +2,7 @@ package com.xust.service.search;
 
 import com.xust.service.ServiceMultiResult;
 import com.xust.service.ServiceResult;
+import com.xust.web.form.MapSearch;
 import com.xust.web.form.RentSearch;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface ISearchService {
     * @param [houseId]
     * @return void
     */
-    boolean index(Long houseId);
+    void index(Long houseId);
 
 /**
  *
@@ -62,4 +63,20 @@ public interface ISearchService {
      */
     ServiceResult<Long> aggregateDistrictHouse(String cityEnName, String regionEnName, String district);
 
+
+    /**
+     * 聚合城市数据
+     */
+    ServiceMultiResult<HouseBucketDTO> mapAggregate(String cityEnName);
+
+    /**
+     * 城市级别查询
+     */
+    ServiceMultiResult<Long> mapQuery(String cityEnName,
+                                      String orderBy, String orderDirection, int start, int size);
+
+    /**
+     * 精确范围数据查询
+     */
+    ServiceMultiResult<Long> mapQuery(MapSearch mapSearch);
 }
