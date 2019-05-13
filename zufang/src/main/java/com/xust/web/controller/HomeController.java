@@ -1,9 +1,15 @@
 package com.xust.web.controller;
 
 import com.xust.base.ApiResponse;
+import com.xust.base.LoginUserUtil;
+import com.xust.service.ISmsService;
+import com.xust.service.ServiceResult;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -14,6 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class HomeController {
+
+    @Autowired
+    private ISmsService smsService;
+
     @GetMapping({"/","/index"})
     public String   index(Model model){
         return "index";
@@ -45,4 +55,20 @@ public class HomeController {
     public String logoutPage() {
         return "logout";
     }
+
+    @GetMapping(value = "sms/code")
+    @ResponseBody
+    public ApiResponse smsCode(@RequestParam("telephone") String telephone) {
+        if (!LoginUserUtil.checkTelephone(telephone)) {
+            return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), "请输入正确的手机号");
+        }
+        ServiceResult<String> result = smsService.sendSms(telephone);
+        if (result.isSuccess()) {
+            return ApiResponse.ofSuccess("");
+        } else {
+            return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), result.getMessage());
+        }
+
+    }
+
 }
